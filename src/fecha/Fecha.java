@@ -5,6 +5,8 @@
  */
 package fecha;
 
+import numeros.Numero;
+
 /**
  * Clase fecha en la que con los atributos dia, mes, anno iremos realizando todas
  * las operaciones que durante el curso se realizen con fechas
@@ -20,6 +22,9 @@ public class Fecha
     private int mes;
     private int anno;
     static private int [] diasMes={31,28,31,30,31,30,31,31,30,31,30,31};
+    static private String [] nombreMes={"enero","febrero","marzo","abril",
+        "mayo","junio","julio","agosto","septiembre","octubre","noviembre",
+        "diciembre"};
 
 
     /**
@@ -28,6 +33,19 @@ public class Fecha
     public Fecha() 
     {//inicio constructor
     }//fin constructor
+
+    /**
+     * constructor pasando valor de atributos
+     * @param dia
+     * @param mes
+     * @param anno 
+     */
+    public Fecha(int dia, int mes, int anno) 
+    {//inicio constructor2
+        this.dia = dia;
+        this.mes = mes;
+        this.anno = anno;
+    }//fin constructor2
 
     
     /**
@@ -318,11 +336,118 @@ public class Fecha
         return dias;//devuelvo los dias de diferencia
     }//fin restarFecha()
     
-    public Fecha fechaVencimiento(int diasV)
-    { 
+    /**
+     * metodo que introduciondo introduciendole una fecha y unos dias los suma 
+     * y nos calcula la fecha que resulta
+     * @param vble 
+     */
+    public void fechaSumar(String vble)
+    {//inicio metodo fechaSumar() 
+        /*objeto fecha2 que devolvere una vez calculada la fecha que resulta de
+        sumar los dias*/
         Fecha fecha2=new Fecha();
-        return fecha2;
-    }
+        int m,a=0;//vbles para recorrer mes y año
+        //pido los dias a sumar y los acumulo en una vble
+        int diasSumar;
+        diasSumar=Numero.pedirNumero("Introduce numero de dias de "+vble,0);
+        int dias;//vble en la que acumulo los dias del primer mes desde fecha1
+        //calculo los dias que quedan hasta fin del primer mes 
+        dias=diasMes[mes-1]-dia;
+        
+        /* pregunto si los dias a sumar son menos que los que quedan de 
+           este mes*/
+        if (dias>=diasSumar)
+        {//si son menores
+            /* quiere decir que la fecha que tenemos que devolver sera del mes y
+               año de la fecha1*/
+            fecha2.setDia(dia+diasSumar);
+            fecha2.setMes(mes);
+            fecha2.setAnno(anno);
+        }//fin si son menores
+        
+        else 
+        {//si no son menores
+            /* quiere decir que por lo menos tendremos 2 meses diferentes con lo
+               cual tengo que descontar los dias que ya han transcurrido desde 
+               el primer mes y seguir recorriendo y acumulando meses*/
+            diasSumar=diasSumar-dias;
+            
+            /* compruebo si el mes es diciembre ya que entonces cambiaremos de 
+               año*/ 
+            if (mes==12) 
+            {//si es diciembre
+                m=0;//inicializo los meses del año 
+                a=1;//acumulo un año pq cambiamos de año
+                diasMes[1]=this.bisiesto(anno+a);//inicializo febrero del siguiente año                        
+            }//si es diciembre
+            
+            else 
+            {//si no es diciembre
+                /* inicializo la vble con el valor del mes para empezar a 
+                   comparar el siguiente mes*/
+                m=mes;
+            }//fin si no es diciembre
+            
+            /* mientras los dias a sumar sean mayores que los dias del
+               siguiente mes completo seguimos acumulando meses*/
+            while (diasSumar>diasMes[m])
+            {//inicio meses completos
+                //resto los dias del mes completo
+                diasSumar=diasSumar-diasMes[m];
+                m++;//cambio de mes
+                if (m==12) 
+                {//si es diciembre
+                    m=0;//inicializo los meses del año 
+                    a++;//acumulo un año pq cambiamos de año
+                    diasMes[1]=this.bisiesto(anno+a);//inicializo febrero del siguiente año                        
+                }//si es diciembre
+            }//fin meses completos
+            /* cuando salgo del while ya se los dias que quedan, los meses y años
+               que han pasado desde la fecha con lo cual los cambio en fecha2*/
+            fecha2.setDia(diasSumar);
+            fecha2.setMes(m+1);
+            fecha2.setAnno(anno+a);           
+        }//fin si no son menores  
+        
+        //visualizo la fecha resultante de la suma
+        System.out.println("dia "+vble+" :"+fecha2.getDia()+"/"+fecha2.getMes()+
+              "/"+fecha2.getAnno());
+        diasMes[1]=bisiesto();
+        //visualizo la fecha2 que sera la fecha1 mas los dias a sumar
+        
+    }//fin metodo fechaSumar()
+    
+    /**
+     * metodo que visualiza una fecha que pedimos de la forma siguiente:
+     * dd/mes en letra/aaaa
+     */
+    public void visualizaFormato()
+    {//inicio metodo visualizaFormato()
+        System.out.println("dia "+dia+" de "+nombreMes[mes-1]+" de "+anno);
+    }//fin metodo visualizaFormato()
+    
+    /**
+     * método que a partir del orden (número de días transcurridos desde 
+     * principio de año) y un año, calcule de que fecha se trata.
+     * lo hacemos llamando al metodo fechaSumar()
+     */
+    public void numeroOrden()
+    {//metodo numeroOrden()
+        //doy valor 0 a dia y mes ya que solo necesitamos el año
+        int d=0; int m=1;int a;
+        //pedimos un año por teclado
+        a=Numero.pedirNumero("introduce un año ", 0);
+        //damos los valores a la fecha 
+        Fecha fecha2=new Fecha(d,m,a);
+        /*inicializamos el mes de febrero del año que hemos introducido por si 
+        es bisiesto*/
+        diasMes[1]=bisiesto(a);
+        /*llamamos al metodo para saber con el numero de orden de que fecha se 
+        trata*/
+        fecha2.fechaSumar("orden ");
+                       
+    }//metodo numeroOrden()
+    
     
 }//fin clase FECHA
 
