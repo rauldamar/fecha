@@ -448,7 +448,10 @@ public class Fecha
                        
     }//metodo numeroOrden()
     
-    
+  public void metodo()
+  {
+      System.out.println("rama primera");
+  }  
     
 }//fin clase FECHA
 
