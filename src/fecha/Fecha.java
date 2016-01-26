@@ -452,6 +452,11 @@ public class Fecha
   {
       System.out.println("rama primera");
   }  
+  
+  public void metodo2()
+  {
+      System.out.println("rama primera");
+  }  
     
 }//fin clase FECHA
 
