@@ -11,7 +11,7 @@ package fecha;
  */
 public class Principal 
 {
-    public void main()
+    public static void main(String [] args)
     {
         Fecha objeto=new Fecha();
         objeto.metodo();
